@@ -55,7 +55,24 @@ class ScannerTest {
                 Arguments.of("1.0e1", new TokenType[]{TokenType.NUMBER, TokenType.IDENTIFIER, TokenType.EOF}),
                 Arguments.of("1.0e+1", new TokenType[]{TokenType.NUMBER, TokenType.IDENTIFIER, TokenType.PLUS, TokenType.NUMBER, TokenType.EOF}),
                 Arguments.of("1.0e-1", new TokenType[]{TokenType.NUMBER, TokenType.IDENTIFIER, TokenType.MINUS, TokenType.NUMBER, TokenType.EOF}),
-                Arguments.of("abs", new TokenType[]{TokenType.IDENTIFIER, TokenType.EOF}));
+                Arguments.of("abs", new TokenType[]{TokenType.IDENTIFIER, TokenType.EOF}),
+                Arguments.of(" ", new TokenType[]{TokenType.EOF}),
+                Arguments.of("\t", new TokenType[]{TokenType.EOF}),
+                Arguments.of("\n", new TokenType[]{TokenType.EOF}),
+                Arguments.of("\r", new TokenType[]{TokenType.EOF}),
+                Arguments.of("\\", new TokenType[]{TokenType.EOF}),
+                Arguments.of(("/*asas*/"), new TokenType[]{TokenType.EOF}),
+                Arguments.of(("""
+                        /*asd fa 123 {}A    1
+                        steadfast \r\\ suber for , . - + ; / * ! != = == > >= < <= or and class else false fun for if nil print return super this true var while
+                        steadfast*/
+                        """), new TokenType[]{TokenType.EOF}),
+                Arguments.of("""
+                        /*sadfsadfsadf
+                        /*sdfasdfsaf */
+                        """, new TokenType[]{TokenType.EOF}),
+                Arguments.of("1 /*/*/ + /*/*/ 2", new TokenType[]{TokenType.NUMBER, TokenType.PLUS, TokenType.NUMBER, TokenType.EOF})
+        );
     }
 
     @ParameterizedTest
@@ -65,6 +82,7 @@ class ScannerTest {
         var scanner = new Scanner(source, "");
         // when
         var tokens = scanner.scanTokens();
+        System.out.println(tokens);
         for (int i = 0; i < expectedTypes.length; i++) {
             Assertions.assertEquals(expectedTypes[i], tokens.get(i).type());
         }

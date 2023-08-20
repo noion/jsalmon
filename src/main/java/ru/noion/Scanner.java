@@ -1,6 +1,9 @@
 package ru.noion;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class Scanner {
 
@@ -77,6 +80,12 @@ public final class Scanner {
                     while (peek() != '\n' && !isAtEnd()) {
                         advance();
                     }
+                } else if (match('*')) {
+                    while (!(match('*') && peek() == '/') && !isAtEnd()) {
+                        advance();
+                    }
+                    // To skip the closing slash.
+                    advance();
                 } else {
                     addToken(TokenType.SLASH);
                 }
