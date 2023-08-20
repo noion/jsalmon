@@ -9,7 +9,7 @@ public final class Scanner {
     static {
         keywords = new HashMap<>();
         keywords.put("or", TokenType.OR);
-        keywords.put("add", TokenType.ADD);
+        keywords.put("and", TokenType.AND);
         keywords.put("class", TokenType.CLASS);
         keywords.put("else", TokenType.ELSE);
         keywords.put("false", TokenType.FALSE);
@@ -23,6 +23,7 @@ public final class Scanner {
         keywords.put("true", TokenType.TRUE);
         keywords.put("var", TokenType.VAR);
         keywords.put("while", TokenType.WHILE);
+        keywords.put("for", TokenType.FOR);
     }
 
     private final String source;
@@ -61,6 +62,7 @@ public final class Scanner {
             case '{' -> addToken(TokenType.LEFT_BRACE);
             case '}' -> addToken(TokenType.RIGHT_BRACE);
             case ',' -> addToken(TokenType.COMMA);
+            case '.' -> addToken(TokenType.DOT);
             case '-' -> addToken(TokenType.MINUS);
             case '+' -> addToken(TokenType.PLUS);
             case ';' -> addToken(TokenType.SEMICOLON);
@@ -189,8 +191,8 @@ public final class Scanner {
     }
 
     private boolean isAlpha(char character) {
-        return (character > 'a' && character < 'z') ||
-               (character > 'A' && character < 'Z') ||
+        return (character >= 'a' && character <= 'z') ||
+               (character >= 'A' && character <= 'Z') ||
                character == '_';
     }
 }
