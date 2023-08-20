@@ -24,7 +24,7 @@ public class Salmon {
 
     private static void runFile(String path) throws IOException {
         var bytes = Files.readAllBytes(Path.of(path));
-        run(new String(bytes, Charset.defaultCharset()));
+        run(path, new String(bytes, Charset.defaultCharset()));
 
         // Indicate an error in the exit code.
         if (hadError) System.exit(65);
@@ -38,13 +38,13 @@ public class Salmon {
             System.out.println("> ");
             var line = reader.readLine();
             if (line == null) break;
-            run(line);
+            run("", line);
             hadError = false;
         }
     }
 
-    private static void run(String source) {
-        var scanner = new Scanner(source);
+    private static void run(String filePath, String source) {
+        var scanner = new Scanner(source, filePath);
         var tokens = scanner.scanTokens();
 
         // Just for print the tokens.
