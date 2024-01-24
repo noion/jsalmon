@@ -5,6 +5,11 @@ plugins {
 group = "ru.noion"
 version = "0.1.1"
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 repositories {
     mavenCentral()
 }
