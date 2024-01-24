@@ -1,4 +1,4 @@
-package ru.noion;
+package ru.noion.jsalmon;
 
 public enum TokenType {
     // Single-character tokens.

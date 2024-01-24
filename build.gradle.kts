@@ -25,7 +25,7 @@ tasks.test {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "ru.noion.Salmon"
+        attributes["Main-Class"] = "ru.noion.jsalmon.Salmon"
     }
     configurations["compileClasspath"].forEach { file: File ->
         from(zipTree(file.absolutePath))

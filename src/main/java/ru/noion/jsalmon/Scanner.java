@@ -1,4 +1,4 @@
-package ru.noion;
+package ru.noion.jsalmon;
 
 import java.util.ArrayList;
 import java.util.HashMap;
