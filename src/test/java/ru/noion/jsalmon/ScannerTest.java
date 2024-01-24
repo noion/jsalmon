@@ -1,4 +1,4 @@
-package ru.noion;
+package ru.noion.jsalmon;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
