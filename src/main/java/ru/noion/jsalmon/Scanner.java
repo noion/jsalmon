@@ -49,7 +49,7 @@ public final class Scanner {
             scanToken();
         }
 
-        tokens.add(new Token(TokenType.EOF, "", null, line, start));
+        tokens.add(new Token(sourceFile, TokenType.EOF, "", null, line, start));
         return tokens;
     }
 
@@ -118,7 +118,7 @@ public final class Scanner {
 
     private void addToken(TokenType tokenType, Object literal) {
         var text = source.substring(start, current);
-        tokens.add(new Token(tokenType, text, literal, line, start));
+        tokens.add(new Token(sourceFile, tokenType, text, literal, line, start));
     }
 
     private boolean match(char character) {

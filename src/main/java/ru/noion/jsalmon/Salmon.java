@@ -57,6 +57,14 @@ public class Salmon {
         report(fileName, line, "", message);
     }
 
+    static void error(Token token, String message) {
+        if (token.type() == TokenType.EOF) {
+            report(token.sourceFile(), token.line(), " at end", message);
+        } else {
+            report(token.sourceFile(), token.line(), " at '" + token.lexeme() + "'", message);
+        }
+    }
+
     private static void report(String fileName, int line, String where, String message) {
         System.err.printf("File %s [line %s] Error %s: %s%n", fileName, line, where, message);
     }

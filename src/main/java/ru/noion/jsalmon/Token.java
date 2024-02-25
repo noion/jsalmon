@@ -1,8 +1,8 @@
 package ru.noion.jsalmon;
 
-public record Token(TokenType type, String lexeme, Object literal, int line, int column) {
+public record Token(String sourceFile, TokenType type, String lexeme, Object literal, int line, int column) {
     @Override
     public String toString() {
-        return "[%d:%d] %s %s %s\n".formatted(line, column, type, lexeme, literal);
+        return "%s: [%d:%d] %s %s %s\n".formatted(sourceFile, line, column, type, lexeme, literal);
     }
 }
