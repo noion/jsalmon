@@ -3,7 +3,11 @@ package ru.noion.jsalmon;
 import java.util.List;
 
 public class Parser {
+    private static class ParserError extends RuntimeException {
+    }
+
     private final List<Token> tokens;
+
     private int current = 0;
 
     public Parser(List<Token> tokens) {
@@ -140,6 +144,36 @@ public class Parser {
         return new ParserError();
     }
 
-    private static class ParserError extends RuntimeException {
+    private void synchronize() {
+        advance();
+
+        while (!isAtEnd()) {
+            if (previous().type() == TokenType.SEMICOLON) {
+                return;
+            }
+
+            switch (peek().type()) {
+                case TokenType.CLASS,
+                     TokenType.FUN,
+                     TokenType.VAR,
+                     TokenType.FOR,
+                     TokenType.IF,
+                     TokenType.WHILE,
+                     TokenType.PRINT,
+                     TokenType.RETURN -> {
+                    return;
+                }
+            }
+
+            advance();
+        }
+    }
+
+    Expr pars() {
+        try {
+            return expression();
+        } catch (ParserError error) {
+            return null;
+        }
     }
 }

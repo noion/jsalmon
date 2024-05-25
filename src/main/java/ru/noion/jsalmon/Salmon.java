@@ -46,11 +46,14 @@ public class Salmon {
     private static void run(String filePath, String source) {
         var scanner = new Scanner(source, filePath);
         var tokens = scanner.scanTokens();
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.pars();
 
-        // Just for print the tokens.
-        for (var token : tokens) {
-            System.out.println(token);
+        if (hadError) {
+            return;
         }
+
+        System.out.println(new AstPrinter().print(expression));
     }
 
     static void error(String fileName, int line, String message) {
