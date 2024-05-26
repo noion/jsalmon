@@ -7,9 +7,18 @@ public class Interpreter implements Expr.Visitor<Object> {
         var right = evaluate(expr.right);
 
         return switch (expr.operator.type()) {
-            case MINUS -> (double) left - (double) right;
-            case SLASH -> (double) left / (double) right;
-            case STAR -> (double) left * (double) right;
+            case MINUS -> {
+                checkNumberOperand(expr.operator, left, right);
+                yield (double) left - (double) right;
+            }
+            case SLASH -> {
+                checkNumberOperand(expr.operator, left, right);
+                yield (double) left / (double) right;
+            }
+            case STAR -> {
+                checkNumberOperand(expr.operator, left, right);
+                yield (double) left * (double) right;
+            }
             case PLUS -> {
                 if (left instanceof Double l && right instanceof Double r) {
                     yield l + r;
@@ -19,14 +28,33 @@ public class Interpreter implements Expr.Visitor<Object> {
                 }
                 yield null;
             }
-            case GREATER -> (double) left > (double) right;
-            case GREATER_EQUAL -> (double) left >= (double) right;
-            case LESS -> (double) left < (double) right;
-            case LESS_EQUAL -> (double) left <= (double) right;
+            case GREATER -> {
+                checkNumberOperand(expr.operator, left);
+                yield (double) left > (double) right;
+            }
+            case GREATER_EQUAL -> {
+                checkNumberOperand(expr.operator, left);
+                yield (double) left >= (double) right;
+            }
+            case LESS -> {
+                checkNumberOperand(expr.operator, left);
+                yield (double) left < (double) right;
+            }
+            case LESS_EQUAL -> {
+                checkNumberOperand(expr.operator, left);
+                yield (double) left <= (double) right;
+            }
             case BANG_EQUAL -> !isEqual(left, right);
             case EQUAL -> isEqual(left, right);
             default -> null;
         };
+    }
+
+    private void checkNumberOperand(Token operator, Object left, Object right) {
+        if (left instanceof Double && right instanceof Double) {
+            return;
+        }
+        throw new RuntimeError(operator, "Operands must be numbers.");
     }
 
     private boolean isEqual(Object left, Object right) {
@@ -59,10 +87,20 @@ public class Interpreter implements Expr.Visitor<Object> {
 
         return switch (expr.operator.type()) {
             case BANG -> !isTruthy(right);
-            case MINUS -> -(double) right;
+            case MINUS -> {
+                checkNumberOperand(expr.operator, right);
+                yield -(double) right;
+            }
             default -> null;
         };
 
+    }
+
+    private void checkNumberOperand(Token operator, Object right) {
+        if (right instanceof Double) {
+            return;
+        }
+        throw new RuntimeError(operator, "Operand must be a number.");
     }
 
     private boolean isTruthy(Object right) {
