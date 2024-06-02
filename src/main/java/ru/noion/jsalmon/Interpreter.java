@@ -26,6 +26,12 @@ public class Interpreter implements Expr.Visitor<Object> {
                 if (left instanceof String l && right instanceof String r) {
                     yield l + r;
                 }
+                if (left instanceof String l) {
+                    yield l + stringify(right);
+                }
+                if (right instanceof String r) {
+                    yield stringify(left) + r;
+                }
                 yield null;
             }
             case GREATER -> {
@@ -111,5 +117,28 @@ public class Interpreter implements Expr.Visitor<Object> {
             return (boolean) right;
         }
         return true;
+    }
+
+    void interpret(Expr expression) {
+        try {
+            var value = evaluate(expression);
+            System.out.println(stringify(value));
+        } catch (RuntimeError error) {
+            Salmon.runtimeError(error);
+        }
+    }
+
+    private String stringify(Object value) {
+        if (value == null) {
+            return "nil";
+        }
+        if (value instanceof Double) {
+            var text = value.toString();
+            if (text.endsWith(".0")) {
+                text = text.substring(0, text.length() - 2);
+            }
+            return text;
+        }
+        return value.toString();
     }
 }

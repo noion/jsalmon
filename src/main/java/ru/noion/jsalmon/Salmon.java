@@ -9,7 +9,10 @@ import java.nio.file.Path;
 
 public class Salmon {
 
+    private static final Interpreter interpreter = new Interpreter();
+
     static boolean hadError = false;
+    static boolean hadRuntimeError = false;
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
@@ -28,6 +31,7 @@ public class Salmon {
 
         // Indicate an error in the exit code.
         if (hadError) System.exit(65);
+        if (hadRuntimeError) System.exit(70);
     }
 
     private static void runPrompt() throws IOException {
@@ -53,7 +57,7 @@ public class Salmon {
             return;
         }
 
-        System.out.println(new AstPrinter().print(expression));
+        interpreter.interpret(expression);
     }
 
     static void error(String fileName, int line, String message) {
@@ -70,5 +74,10 @@ public class Salmon {
 
     private static void report(String fileName, int line, String where, String message) {
         System.err.printf("File %s [line %s] Error %s: %s%n", fileName, line, where, message);
+    }
+
+    public static void runtimeError(RuntimeError error) {
+        System.err.printf("%s\n[line %s]%n", error.getMessage(), error.token.line());
+        hadRuntimeError = true;
     }
 }
