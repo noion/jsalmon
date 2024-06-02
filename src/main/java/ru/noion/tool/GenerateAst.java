@@ -2,6 +2,7 @@ package ru.noion.tool;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,10 @@ public class GenerateAst {
                 "Literal  : Object value",
                 "Unary    : Token operator, Expr right"
         ));
-
+        defineAst(outputDir, "Stmt", Arrays.asList(
+                "Expression : Expr expression",
+                "Print      : Expr expression"
+        ));
     }
 
     private static void defineAst(
@@ -28,7 +32,7 @@ public class GenerateAst {
             List<String> types
     ) throws java.io.IOException {
         var path = outputDir + "/" + baseName + ".java";
-        var writer = new PrintWriter(path, "UTF-8");
+        var writer = new PrintWriter(path, StandardCharsets.UTF_8);
 
         writer.println("package ru.noion.jsalmon;");
         writer.println();
