@@ -1,6 +1,7 @@
 package ru.noion.jsalmon;
 
 public class Interpreter implements Expr.Visitor<Object> {
+
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
         var left = evaluate(expr.left);
@@ -13,6 +14,9 @@ public class Interpreter implements Expr.Visitor<Object> {
             }
             case SLASH -> {
                 checkNumberOperand(expr.operator, left, right);
+                if ((double) right == 0) {
+                    throw new RuntimeError(expr.operator, "Division by zero");
+                }
                 yield (double) left / (double) right;
             }
             case STAR -> {
