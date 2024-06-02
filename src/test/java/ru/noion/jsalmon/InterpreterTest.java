@@ -11,10 +11,10 @@ class InterpreterTest {
     @Test
     void interpret_divide_by_zero() {
         // given
-        var scanner = new Scanner("1 / 0", "");
+        var scanner = new Scanner("1 / 0;", "");
         var tokens = scanner.scanTokens();
-        Parser parser = new Parser(tokens);
-        Expr expression = parser.pars();
+        var parser = new Parser(tokens);
+        var statements = parser.parse();
         var interpreter = new Interpreter();
 
         // Prepare to capture error stream
@@ -23,7 +23,7 @@ class InterpreterTest {
         System.setErr(new PrintStream(errorContent));
 
         // when
-        interpreter.interpret(expression);
+        interpreter.interpret(statements);
 
         // Reset error stream back to original
         System.setErr(originalErr);

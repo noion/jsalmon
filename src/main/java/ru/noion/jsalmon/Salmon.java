@@ -50,14 +50,14 @@ public class Salmon {
     private static void run(String filePath, String source) {
         var scanner = new Scanner(source, filePath);
         var tokens = scanner.scanTokens();
-        Parser parser = new Parser(tokens);
-        Expr expression = parser.pars();
+        var parser = new Parser(tokens);
+        var statements = parser.parse();
 
         if (hadError) {
             return;
         }
 
-        interpreter.interpret(expression);
+        interpreter.interpret(statements);
     }
 
     static void error(String fileName, int line, String message) {

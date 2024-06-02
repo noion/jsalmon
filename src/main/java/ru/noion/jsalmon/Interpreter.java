@@ -1,6 +1,8 @@
 package ru.noion.jsalmon;
 
-public class Interpreter implements Expr.Visitor<Object> {
+import java.util.List;
+
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
@@ -123,13 +125,18 @@ public class Interpreter implements Expr.Visitor<Object> {
         return true;
     }
 
-    void interpret(Expr expression) {
+    void interpret(List<Stmt> statements) {
         try {
-            var value = evaluate(expression);
-            System.out.println(stringify(value));
+            for (var stmt : statements) {
+                execute(stmt);
+            }
         } catch (RuntimeError error) {
             Salmon.runtimeError(error);
         }
+    }
+
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
     }
 
     private String stringify(Object value) {
@@ -144,5 +151,18 @@ public class Interpreter implements Expr.Visitor<Object> {
             return text;
         }
         return value.toString();
+    }
+
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print stmt) {
+        var evaluate = evaluate(stmt.expression);
+        System.out.println(stringify(evaluate));
+        return null;
     }
 }
